@@ -18,7 +18,7 @@ def post_detail(request, pk):
 def post_new(request):
 	if request.method == "POST":
 		form = PostForm(request.POST)
-		return check_validity(form)
+		return check_validity(form, request)
 	else:
 		form = PostForm()
 	return render(request, 'blog/post_edit.html',{'form':form})
@@ -27,12 +27,12 @@ def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
-        return check_validity(form)
+        return check_validity(form, request)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
-def check_validity(form):
+def check_validity(form, request):
 	if form.is_valid():
 		post = form.save(commit=False)
 		post.author = request.user
